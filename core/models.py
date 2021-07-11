@@ -59,6 +59,15 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    @property
+    def name(self):
+        return self.first_name + ' ' + self.last_name
+
+    @property
+    def revenue(self):
+        orders = Order.objects.filter(user_id=self.pk, complete=True)
+        return sum(o.ambassador_revenue for o in orders)
+
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
@@ -90,6 +99,15 @@ class Order(models.Model):
     complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def name(self):
+        return self.first_name + ' ' + self.last_name
+
+    @property
+    def ambassador_revenue(self):
+        items = OrderItem.objects.filter(order_id=self.pk)
+        return sum(i.ambassador_revenue for i in items)
 
 
 class OrderItem(models.Model):

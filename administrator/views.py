@@ -8,6 +8,7 @@ from .serializer import *
 from core.models import User, Product
 from faker import Faker
 import random
+from django.core.cache import cache
 
 
 class AmbassadorAPIView(APIView):
@@ -40,13 +41,22 @@ class ProductGenericAPIView(
         return self.list(request)
 
     def post(self, request):
-        return self.create(request)
+        response = self.create(request)
+        # cache.delete('*')
+        cache.delete('products_backend')
+        return response
 
     def put(self, request, pk=None):
-        return self.partial_update(request, pk)
+        response = self.partial_update(request, pk)
+        # cache.delete('*')
+        cache.delete('products_backend')
+        return response
 
     def delete(self, request, pk=None):
-        return self.destroy(request, pk)
+        response = self.destroy(request, pk)
+        # cache.delete('*')
+        cache.delete('products_backend')
+        return response
 
 
 class LinkAPIView(APIView):

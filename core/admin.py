@@ -9,3 +9,6 @@ class SuperUser(UserAdmin):
 
 admin.site.register(User, SuperUser)
 admin.site.register(Product)
+admin.site.register(Order)
+admin.site.register(OrderItem)
+admin.site.register(Link)

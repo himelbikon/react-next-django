@@ -57,7 +57,13 @@ class UserAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response(UserSerializer(request.user).data)
+        user = request.user
+        data = UserSerializer(user).data
+
+        if 'api/ambassador' in request.path:
+            data['revenue'] = user.revenue
+
+        return Response(data)
 
 
 class LogoutAPIView(APIView):
